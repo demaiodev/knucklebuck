@@ -39,10 +39,10 @@
 			if (player.board[index][y] === 0) {
 				player.board[index][y] = player.currentRoll;
 				if (isGameOver()) gameState.gameOver = true;
+				endTurn();
 				return;
 			}
 		}
-		endTurn();
 	}
 
 	function isGameOver() {
