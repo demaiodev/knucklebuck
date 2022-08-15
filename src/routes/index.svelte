@@ -15,14 +15,19 @@
 		// player clicks button to rolls the dice.
 		// we assign the rolled number to the players currentRoll, then set rollingDice to false.
 		// player chooses where to place number.
-		getActivePlayer().currentRoll = getDiceRoll();
-		console.log({playerOne, playerTwo})
+
+		//this function doesnt like  getactiveplayer for some reason
+		if (playerOne.isActive == true) {
+			playerOne.currentRoll = getDiceRoll();
+		} else playerTwo.currentRoll = getDiceRoll();
+
+		console.log({ playerOne, playerTwo });
 		gameState.rollingDice = false;
 	}
 
 	function getActivePlayer() {
-		if (playerOne.isActive) return playerOne
-		else return playerTwo
+		if (playerOne.isActive) return playerOne;
+		else return playerTwo;
 	}
 
 	function endTurn() {
@@ -115,13 +120,11 @@
 </svelte:head>
 
 <div class="table">
-	{
-		`Is it ${getActivePlayer().name}'s turn? ${getActivePlayer().isActive}`
-	}
+	{`Is it ${getActivePlayer().name}'s turn? ${getActivePlayer().isActive}`}
 	<!-- Player Ones Board and Button -->
 	<div class="tableside">
 		<button on:click={handleDiceRoll} type="button" class="btn btn-primary">Roll Dice</button>
-		<div class="dice">{playerOne.currentRoll}</div>
+		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
 	</div>
 	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
 
