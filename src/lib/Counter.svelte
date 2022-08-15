@@ -1,6 +1,22 @@
 <script lang="ts">
 	import { spring } from 'svelte/motion';
 
+	// import { enhance } from '$lib/form';
+	// import { scale } from 'svelte/transition';
+	// import { flip } from 'svelte/animate';
+
+	// referring to this for future types
+
+	// type Todo = {
+	// 	uid: string;
+	// 	created_at: Date;
+	// 	text: string;
+	// 	done: boolean;
+	// 	pending_delete: boolean;
+	// };
+
+	// export let todos: Todo[];
+
 	let count = 0;
 
 	const displayed_count = spring();
