@@ -24,7 +24,6 @@
 
 	<div class="corner">
 		<!-- TODO put something else here? github link? -->
-		LINKY POO
 	</div>
 </header>
 
