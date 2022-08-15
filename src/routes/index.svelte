@@ -3,52 +3,46 @@
 </script>
 
 <script lang="ts">
-	type GameState = {
-		gameOver: boolean;
-		playerOnesTurn: boolean;
-		difficulty: number;
-		rollingDice: boolean;
-	};
-
-	type Player = {
-		name: string;
-		isFirstPlayer: boolean;
-		currentRoll: number;
-		score: number;
-		currency: number;
-		wager: number;
-		board: any;
-		wins: number;
-	};
-
-	const dieFaces: any = {
-		0: '',
-		1: '\u2680',
-		2: '\u2681',
-		3: '\u2682',
-		4: '\u2683',
-		5: '\u2684',
-		6: '\u2685'
-	};
+	import type { Player } from 'src/types/Player';
+	import type { GameState } from 'src/types/GameState';
+	import Board from '$lib/Board.svelte';
 
 	function getDiceRoll() {
 		return Math.floor(Math.random() * 6 + 1);
 	}
 
 	function handleDiceRoll() {
-		playerOne.currentRoll = getDiceRoll();
+		// player clicks button to rolls the dice.
+		// we assign the rolled number to the players currentRoll, then set rollingDice to false.
+		// player chooses where to place number.
+		getActivePlayer().currentRoll = getDiceRoll();
+		console.log({playerOne, playerTwo})
 		gameState.rollingDice = false;
 	}
 
-	function makeSelection(x: number) {
-		for (let y = 0; y < playerOne.board[x].length; y++) {
-			if (playerOne.board[x][y] === 0) {
-				playerOne.board[x][y] = playerOne.currentRoll;
+	function getActivePlayer() {
+		if (playerOne.isActive) return playerOne
+		else return playerTwo
+	}
+
+	function endTurn() {
+		playerOne.isActive = !playerOne.isActive;
+		playerTwo.isActive = !playerTwo.isActive;
+	}
+
+	function makeSelection({ index }: { index: number }) {
+		// 1.) calculate each columns sum -- todo
+		// 2.) calculate the current player's score -- todo
+		// 3.) check if the game is over
+		const player = getActivePlayer();
+		for (let y = 0; y < player.board[index].length; y++) {
+			if (player.board[index][y] === 0) {
+				player.board[index][y] = player.currentRoll;
 				if (isGameOver()) gameState.gameOver = true;
-				else gameState.playerOnesTurn = false;
 				return;
 			}
 		}
+		endTurn();
 	}
 
 	function isGameOver() {
@@ -69,6 +63,7 @@
 			currency: 100,
 			wager: 0,
 			wins: 0,
+			isActive: false,
 			board: [
 				[0, 0, 0],
 				[0, 0, 0],
@@ -80,22 +75,38 @@
 	// crate game instance
 	const gameState: GameState = {
 		gameOver: false,
-		playerOnesTurn: true, // is it always player ones turn in the beginning?
 		difficulty: 0,
 		rollingDice: true
+	};
+
+	const dieFaces: any = {
+		0: '',
+		1: '\u2680',
+		2: '\u2681',
+		3: '\u2682',
+		4: '\u2683',
+		5: '\u2684',
+		6: '\u2685'
 	};
 
 	// create players
 	const playerOne = createPlayer('Player One', true);
 	const playerTwo = createPlayer('Computer Guy', false);
 
-	// player rolls the dice
+	// player one starts
+	playerOne.isActive = true;
 
-	// player chooses where to place his dice roll
+	// Basic Turn Order
+	// player clicks button to rolls the dice.
+	// we assign the rolled number to the players currentRoll, then set rollingDice to false.
+	// player chooses where to place number.
 
-	// calculations for the column
+	// after a column is selected (makeSelection), we:
+	// 1.) calculate each columns sum -- todo
+	// 2.) calculate the current player's score -- todo
+	// 3.) check if the game is over
 
-	// check if game is over
+	// end current players turn, next player begins.
 </script>
 
 <svelte:head>
@@ -104,54 +115,29 @@
 </svelte:head>
 
 <div class="table">
-	
+	{
+		`Is it ${getActivePlayer().name}'s turn? ${getActivePlayer().isActive}`
+	}
+	<!-- Player Ones Board and Button -->
 	<div class="tableside">
 		<button on:click={handleDiceRoll} type="button" class="btn btn-primary">Roll Dice</button>
-		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
+		<div class="dice">{playerOne.currentRoll}</div>
 	</div>
-	<div />
-	<section class="board">
-		{#each playerOne.board as lane, index (index)}
-			<div
-				on:click={() => makeSelection(index)}
-				class={gameState.playerOnesTurn === true && gameState.rollingDice === false
-					? 'lane__active'
-					: 'lane'}
-			>
-				{#each lane as space}
-					<div class="space"><div class="dice">{dieFaces[space]}</div></div>
-				{/each}
-			</div>
-		{/each}
-	</section>
+	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
+
+	<!-- Player Twos Board and Button -->
+	<div class="tableside">
+		<button on:click={handleDiceRoll} type="button" class="btn btn-primary">Roll Dice</button>
+		<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
+	</div>
+	<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
 </div>
 
 <style lang="scss">
-	.lane {
-		&__active:hover {
-			background-color: bisque;
-		}
-	}
-
-	.board {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-direction: row;
-		margin-top: 4rem;
-	}
 	.dice {
 		font-size: 4rem;
 		color: #222;
 		padding-bottom: 0.8rem;
-	}
-	.space {
-		display: flex;
-		align-items: center;
-		border: 2px solid #222;
-		justify-content: center;
-		height: 6rem;
-		width: 5.5rem;
 	}
 	.tableside {
 		display: flex;
