@@ -3,59 +3,69 @@
 </script>
 
 <script lang="ts">
-	import Counter from '$lib/Counter.svelte';
+	type GameState = {
+		gameOver: boolean;
+		playerOnesTurn: boolean;
+		difficulty: number;
+		rollingDice: boolean;
+	};
+
+	type Player = {
+		name: string;
+		isFirstPlayer: boolean;
+		currentRoll: number;
+		score: number;
+		currency: number;
+		wager: number;
+		board: any;
+		wins: number;
+	};
+
+	function getDiceRoll() {
+		return Math.floor(Math.random() * 6 + 1);
+	}
+
+	function createPlayer(name: string, isFirstPlayer: boolean): Player {
+		return {
+			name,
+			isFirstPlayer,
+			currentRoll: 0,
+			score: 0,
+			currency: 100,
+			wager: 0,
+			wins: 0,
+			board: [
+				[0, 0, 0],
+				[0, 0, 0],
+				[0, 0, 0]
+			]
+		};
+	}
+
+	// crate game instance
+	const gameState: GameState = {
+		gameOver: false,
+		playerOnesTurn: true, // is it always player ones turn in the beginning?
+		difficulty: 0,
+		rollingDice: false
+	};
+
+	// create players
+	const playerOne = createPlayer('Player One', true);
+	const playerTwo = createPlayer('Computer Guy', false);
+
+	// player rolls the dice
+	playerOne.currentRoll = getDiceRoll();
+
+	// player chooses where to place his dice roll
+
+	// calculations for the column
+
+	// check if game is over
+
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>KnuckleBuck</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
-
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset="svelte-welcome.webp" type="image/webp" />
-				<img src="svelte-welcome.png" alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/index.svelte</strong>
-	</h2>
-
-	<Counter />
-</section>
-
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 1;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-</style>
