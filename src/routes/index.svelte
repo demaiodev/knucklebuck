@@ -21,17 +21,7 @@
 		wins: number;
 	};
 
-	type DieFaces = {
-		0: string;
-		1: string;
-		2: string;
-		3: string;
-		4: string;
-		5: string;
-		6: string;
-	};
-
-	const dieFaces: DieFaces = {
+	const dieFaces: any = {
 		0: '',
 		1: '\u2680',
 		2: '\u2681',
