@@ -6,12 +6,15 @@
 	export let player: Player;
 
 	import { createEventDispatcher } from 'svelte';
-
 	const dispatch = createEventDispatcher();
 
 	function emitSelection(index: number) {
 		dispatch('selection', { index, player });
 	}
+
+	const laneType = !player.isFirstPlayer ? 'lane--inverted' : 'lane'
+	$: laneActive = (!gameState.rollingDice && !waitingForTurn) ? ' active' : ''
+	$: waitingForTurn = Boolean(!player.isActive);
 
 	const dieFaces: any = {
 		0: '',
@@ -26,22 +29,33 @@
 
 <section class="board">
 	{#each player.board as lane, index (index)}
-		<div
+		<button
+			disabled={waitingForTurn || gameState.rollingDice}
+			class={laneType + laneActive}
 			on:click={() => emitSelection(index)}
-			class={gameState.rollingDice === false ? 'lane__active' : 'lane'}
 		>
 			{#each lane as space}
 				<div class="space"><div class="dice">{dieFaces[space]}</div></div>
 			{/each}
-		</div>
+		</button>
 	{/each}
 </section>
 
 <style lang="scss">
+	.active:hover {
+		background-color: bisque;
+	}
 	.lane {
-		&__active:hover {
-			background-color: bisque;
-		}
+		border: none;
+		padding: 0;
+		margin: 0;
+	}
+	.lane--inverted {
+		display: flex;
+		flex-direction: column-reverse;
+		border: none;
+		padding: 0;
+		margin: 0;
 	}
 	.dice {
 		font-size: 4rem;
