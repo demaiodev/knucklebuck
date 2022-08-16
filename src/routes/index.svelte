@@ -115,20 +115,24 @@
 {/if}
 <div class="table">
 	<div class="tableside">
-		PLAYER 2
+		<div class={playerTwo.isActive ? 'active-player' : ''}>{playerTwo.name}</div>
 		<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 	</div>
 	<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
 
 	<div>{whosTurn}</div>
 	<div class="tableside">
-		PLAYER 1
+		<div class={playerOne.isActive ? 'active-player' : ''}>{playerOne.name}</div>
 		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
 	</div>
 	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
 </div>
 
 <style lang="scss">
+	.active-player {
+		font-size: 1.5rem;
+		color: red; // what color should this be?
+	}
 	.dice {
 		font-size: 4rem;
 		color: #222;
