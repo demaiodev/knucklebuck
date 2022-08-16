@@ -12,8 +12,8 @@
 		dispatch('selection', { index, player });
 	}
 
-	const laneType = !player.isFirstPlayer ? 'lane--inverted' : 'lane'
-	$: laneActive = (!gameState.rollingDice && !waitingForTurn) ? ' active' : ''
+	const laneType = !player.isFirstPlayer ? 'lane--inverted' : 'lane';
+	$: laneActive = !gameState.rollingDice && !waitingForTurn ? ' active' : '';
 	$: waitingForTurn = Boolean(!player.isActive);
 
 	const dieFaces: any = {
@@ -30,7 +30,7 @@
 <section class="board">
 	{#each player.board as lane, index (index)}
 		<button
-			disabled={waitingForTurn || gameState.rollingDice}
+			disabled={waitingForTurn || gameState.rollingDice || gameState.gameOver}
 			class={laneType + laneActive}
 			on:click={() => emitSelection(index)}
 		>
