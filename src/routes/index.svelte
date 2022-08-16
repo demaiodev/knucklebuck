@@ -31,8 +31,9 @@
 	}
 
 	function endTurn() {
-		playerOne.isActive = !playerOne.isActive;
-		playerTwo.isActive = !playerTwo.isActive;
+		playerOne.isActive = Boolean(!playerOne.isActive);
+		playerTwo.isActive = Boolean(!playerTwo.isActive);
+		gameState.rollingDice = true
 	}
 
 	function makeSelection({ index }: { index: number }) {
@@ -101,6 +102,8 @@
 	// player one starts
 	playerOne.isActive = true;
 
+	$: whosTurn = playerOne.isActive ? 'Player ones turn' : 'Player twos turn';
+
 	// Basic Turn Order
 	// player clicks button to rolls the dice.
 	// we assign the rolled number to the players currentRoll, then set rollingDice to false.
@@ -120,20 +123,30 @@
 </svelte:head>
 
 <div class="table">
-	{`Is it ${getActivePlayer().name}'s turn? ${getActivePlayer().isActive}`}
-	<!-- Player Ones Board and Button -->
 	<div class="tableside">
-		<button on:click={handleDiceRoll} type="button" class="btn btn-primary">Roll Dice</button>
-		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
-	</div>
-	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
-
-	<!-- Player Twos Board and Button -->
-	<div class="tableside">
-		<button on:click={handleDiceRoll} type="button" class="btn btn-primary">Roll Dice</button>
+		PLAYER 2 
+		<button
+			disabled={!playerTwo.isActive || !gameState.rollingDice}
+			on:click={handleDiceRoll}
+			type="button"
+			class="btn btn-primary">Roll Dice</button
+		>
 		<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 	</div>
 	<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
+
+	<div>{whosTurn}</div>
+	<div class="tableside">
+		PLAYER 1 
+		<button
+			disabled={!playerOne.isActive ||!gameState.rollingDice}
+			on:click={handleDiceRoll}
+			type="button"
+			class="btn btn-primary">Roll Dice</button
+		>
+		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
+	</div>
+	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
 </div>
 
 <style lang="scss">
