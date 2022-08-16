@@ -15,6 +15,10 @@
 	const laneType = !player.isFirstPlayer ? 'lane--inverted' : 'lane';
 	$: laneActive = !gameState.rollingDice && !waitingForTurn ? ' active' : '';
 	$: waitingForTurn = Boolean(!player.isActive);
+	$: calculateLaneScore = (x: number) => {
+		//here
+		return 0
+	};
 
 	const dieFaces: any = {
 		0: '',
@@ -29,6 +33,9 @@
 
 <section class="board">
 	{#each player.board as lane, index (index)}
+		<div class="score-wrapper">
+			<div class="lane_score">{calculateLaneScore(index)}</div>
+		</div>
 		<button
 			disabled={waitingForTurn || gameState.rollingDice || gameState.gameOver}
 			class={laneType + laneActive}
@@ -42,6 +49,14 @@
 </section>
 
 <style lang="scss">
+	.score-wrapper {
+		position: relative;
+	}
+	.lane_score {
+		top: -185px;
+		left: 30px;
+		position: absolute;
+	}
 	.active:hover {
 		background-color: bisque;
 	}
