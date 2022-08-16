@@ -12,16 +12,8 @@
 	}
 
 	function handleDiceRoll() {
-		// player clicks button to rolls the dice.
-		// we assign the rolled number to the players currentRoll, then set rollingDice to false.
-		// player chooses where to place number.
-
-		//this function doesnt like  getactiveplayer for some reason
-		if (playerOne.isActive == true) {
-			playerOne.currentRoll = getDiceRoll();
-		} else playerTwo.currentRoll = getDiceRoll();
-
-		console.log({ playerOne, playerTwo });
+		if (playerOne.isActive) playerOne.currentRoll = getDiceRoll();
+		else playerTwo.currentRoll = getDiceRoll();
 		gameState.rollingDice = false;
 	}
 
@@ -31,15 +23,12 @@
 	}
 
 	function endTurn() {
-		playerOne.isActive = Boolean(!playerOne.isActive);
-		playerTwo.isActive = Boolean(!playerTwo.isActive);
-		gameState.rollingDice = true
+		playerOne.isActive = !playerOne.isActive;
+		playerTwo.isActive = !playerTwo.isActive;
+		gameState.rollingDice = true;
 	}
 
 	function makeSelection({ index }: { index: number }) {
-		// 1.) calculate each columns sum -- todo
-		// 2.) calculate the current player's score -- todo
-		// 3.) check if the game is over
 		const player = getActivePlayer();
 		for (let y = 0; y < player.board[index].length; y++) {
 			if (player.board[index][y] === 0) {
@@ -51,13 +40,22 @@
 		}
 	}
 
-	function isGameOver() {
-		for (let x = 0; x < playerOne.board.length; x++) {
-			for (let y = 0; y < playerOne.board[x].length; y++) {
-				if (playerOne.board[x][y] === 0) return false;
+	function checkPlayerBoard(player: Player) {
+		for (let x = 0; x < player.board.length; x++) {
+			for (let y = 0; y < player.board[x].length; y++) {
+				if (player.board[x][y] === 0) return false;
 			}
 		}
 		return true;
+	}
+
+	function isGameOver() {
+		// temporary, need to calculate scores after either board has been filled to determine the TRUE WINNER!!!
+		const p1Wins = checkPlayerBoard(playerOne);
+		const p2Wins = checkPlayerBoard(playerTwo);
+		if (p1Wins) gameState.winner = playerOne.name;
+		if (p2Wins) gameState.winner = playerTwo.name;
+		return p1Wins || p2Wins;
 	}
 
 	function createPlayer(name: string, isFirstPlayer: boolean): Player {
@@ -122,11 +120,14 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
+{#if gameState.gameOver}
+	Congrats, {gameState.winner}!
+{/if}
 <div class="table">
 	<div class="tableside">
-		PLAYER 2 
+		PLAYER 2
 		<button
-			disabled={!playerTwo.isActive || !gameState.rollingDice}
+			disabled={!playerTwo.isActive || !gameState.rollingDice || gameState.gameOver}
 			on:click={handleDiceRoll}
 			type="button"
 			class="btn btn-primary">Roll Dice</button
@@ -137,9 +138,9 @@
 
 	<div>{whosTurn}</div>
 	<div class="tableside">
-		PLAYER 1 
+		PLAYER 1
 		<button
-			disabled={!playerOne.isActive ||!gameState.rollingDice}
+			disabled={!playerOne.isActive || !gameState.rollingDice || gameState.gameOver}
 			on:click={handleDiceRoll}
 			type="button"
 			class="btn btn-primary">Roll Dice</button
