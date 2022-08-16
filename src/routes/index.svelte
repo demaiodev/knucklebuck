@@ -26,6 +26,7 @@
 		playerOne.isActive = !playerOne.isActive;
 		playerTwo.isActive = !playerTwo.isActive;
 		gameState.rollingDice = true;
+		handleDiceRoll();
 	}
 
 	function makeSelection({ index }: { index: number }) {
@@ -99,20 +100,9 @@
 
 	// player one starts
 	playerOne.isActive = true;
+	handleDiceRoll();
 
 	$: whosTurn = playerOne.isActive ? 'Player ones turn' : 'Player twos turn';
-
-	// Basic Turn Order
-	// player clicks button to rolls the dice.
-	// we assign the rolled number to the players currentRoll, then set rollingDice to false.
-	// player chooses where to place number.
-
-	// after a column is selected (makeSelection), we:
-	// 1.) calculate each columns sum -- todo
-	// 2.) calculate the current player's score -- todo
-	// 3.) check if the game is over
-
-	// end current players turn, next player begins.
 </script>
 
 <svelte:head>
@@ -126,12 +116,6 @@
 <div class="table">
 	<div class="tableside">
 		PLAYER 2
-		<button
-			disabled={!playerTwo.isActive || !gameState.rollingDice || gameState.gameOver}
-			on:click={handleDiceRoll}
-			type="button"
-			class="btn btn-primary">Roll Dice</button
-		>
 		<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 	</div>
 	<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
@@ -139,12 +123,6 @@
 	<div>{whosTurn}</div>
 	<div class="tableside">
 		PLAYER 1
-		<button
-			disabled={!playerOne.isActive || !gameState.rollingDice || gameState.gameOver}
-			on:click={handleDiceRoll}
-			type="button"
-			class="btn btn-primary">Roll Dice</button
-		>
 		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
 	</div>
 	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
