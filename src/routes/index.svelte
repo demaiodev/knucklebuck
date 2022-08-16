@@ -138,7 +138,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		margin-top: 2rem;
+		// margin-top: 2rem;
 		height: 100px;
 		.dice {
 			margin-left: 2rem;

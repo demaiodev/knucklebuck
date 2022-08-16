@@ -67,7 +67,7 @@
 		justify-content: center;
 		align-items: center;
 		flex-direction: row;
-		margin-top: 4rem;
+		// margin-top: 4rem;
 	}
 	.space {
 		display: flex;
