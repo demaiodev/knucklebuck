@@ -79,9 +79,7 @@
 		};
 	}
 
-	function handleScoreUpdate(event: { player: Player; score: number }) {
-		const player: Player = event.player;
-		const score: number = event.score;
+	function handleScoreUpdate({ player, score }: { player: Player; score: number }) {
 		player.score = score;
 	}
 
