@@ -39,7 +39,7 @@
 		for (const property in dict) {
 			score += Math.pow(+property, dict[property]);
 		}
-
+		dispatch('score-update', { player, score });
 		return score;
 	};
 </script>

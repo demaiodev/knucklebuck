@@ -79,6 +79,12 @@
 		};
 	}
 
+	function handleScoreUpdate(event: { player: Player; score: number }) {
+		const player: Player = event.player;
+		const score: number = event.score;
+		player.score = score;
+	}
+
 	// crate game instance
 	const gameState: GameState = {
 		gameOver: false,
@@ -117,17 +123,27 @@
 {/if}
 <div class="table">
 	<div class="tableside">
-		<div class={playerTwo.isActive ? 'active-player' : ''}>{playerTwo.name}</div>
+		<div class={playerTwo.isActive ? 'active-player' : ''}>{playerTwo.name} {playerTwo.score}</div>
 		<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 	</div>
-	<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
+	<Board
+		player={playerTwo}
+		{gameState}
+		on:selection={({ detail }) => makeSelection(detail)}
+		on:score-update={({ detail }) => handleScoreUpdate(detail)}
+	/>
 
 	<div>{whosTurn}</div>
 	<div class="tableside">
-		<div class={playerOne.isActive ? 'active-player' : ''}>{playerOne.name}</div>
+		<div class={playerOne.isActive ? 'active-player' : ''}>{playerOne.name} {playerOne.score}</div>
 		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
 	</div>
-	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
+	<Board
+		player={playerOne}
+		{gameState}
+		on:selection={({ detail }) => makeSelection(detail)}
+		on:score-update={({ detail }) => handleScoreUpdate(detail)}
+	/>
 </div>
 
 <style lang="scss">
