@@ -1,18 +1,27 @@
 <script lang="ts">
 	import type { Player } from 'src/types/Player';
 	import type { GameState } from 'src/types/GameState';
+	import { createEventDispatcher } from 'svelte';
 
 	export let gameState: GameState;
 	export let player: Player;
 
-	import { createEventDispatcher } from 'svelte';
+	const laneType = !player.isFirstPlayer ? 'lane--inverted' : 'lane';
 	const dispatch = createEventDispatcher();
+	const dieFaces: any = {
+		0: '',
+		1: '\u2680',
+		2: '\u2681',
+		3: '\u2682',
+		4: '\u2683',
+		5: '\u2684',
+		6: '\u2685'
+	};
 
 	function emitSelection(index: number) {
 		dispatch('selection', { index, player });
 	}
 
-	const laneType = !player.isFirstPlayer ? 'lane--inverted' : 'lane';
 	$: laneActive = !gameState.rollingDice && !waitingForTurn ? ' active' : '';
 	$: waitingForTurn = !player.isActive;
 	$: calculateLaneScore = (x: number) => {
@@ -32,16 +41,6 @@
 		}
 
 		return score;
-	};
-
-	const dieFaces: any = {
-		0: '',
-		1: '\u2680',
-		2: '\u2681',
-		3: '\u2682',
-		4: '\u2683',
-		5: '\u2684',
-		6: '\u2685'
 	};
 </script>
 
