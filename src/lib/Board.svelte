@@ -14,10 +14,21 @@
 
 	const laneType = !player.isFirstPlayer ? 'lane--inverted' : 'lane';
 	$: laneActive = !gameState.rollingDice && !waitingForTurn ? ' active' : '';
-	$: waitingForTurn = Boolean(!player.isActive);
+	$: waitingForTurn = !player.isActive;
 	$: calculateLaneScore = (x: number) => {
-		//here
-		return 0
+		const dict: any = {};
+		let score = 0;
+		for (var i = 0; i < player.board[x].length; ++i) {
+			if (player.board[x][i] !== 0) {
+				if (!dict[player.board[x][i]]) dict[player.board[x][i]] = 0;
+				++dict[player.board[x][i]];
+			}
+		}
+		for (const property in dict) {
+			score += Math.pow(+property, dict[property]);
+		}
+
+		return score;
 	};
 
 	const dieFaces: any = {
