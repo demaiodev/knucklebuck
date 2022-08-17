@@ -25,6 +25,8 @@
 	function endTurn() {
 		playerOne.isActive = !playerOne.isActive;
 		playerTwo.isActive = !playerTwo.isActive;
+		playerOne.currentRoll = 0;
+		playerTwo.currentRoll = 0;
 		gameState.rollingDice = true;
 		handleDiceRoll();
 	}
