@@ -5,6 +5,9 @@
 <script lang="ts">
 	import type { Player } from 'src/types/Player';
 	import type { GameState } from 'src/types/GameState';
+	import { calcTotalScore } from '$lib/utils/scores';
+	import { dieFaces } from '$lib/utils/constants';
+
 	import Board from '$lib/Board.svelte';
 
 	let playerOne: Player;
@@ -27,6 +30,9 @@
 	}
 
 	function endTurn() {
+		playerOne.score = calcTotalScore(playerOne);
+		playerTwo.score = calcTotalScore(playerTwo);
+		if (isGameOver()) gameState.gameOver = true;
 		playerOne.isActive = !playerOne.isActive;
 		playerTwo.isActive = !playerTwo.isActive;
 		playerOne.currentRoll = 0;
@@ -35,14 +41,13 @@
 		handleDiceRoll();
 	}
 
-	function makeSelection({ index, playerScore }: { index: number; playerScore: any }) {
+	function makeSelection({ index }: { index: number }) {
 		const player = getActivePlayer();
 		const otherPlayerBoard = player.isFirstPlayer ? playerTwo.board : playerOne.board;
 		for (let y = 0; y < player.board[index].length; y++) {
 			if (player.board[index][y] === 0) {
 				player.board[index][y] = player.currentRoll;
 				clearMatches(otherPlayerBoard[index], player.currentRoll);
-				player.score = playerScore();
 				isGameOver();
 				endTurn();
 				return;
@@ -121,16 +126,6 @@
 		playerOne.isActive = true;
 		handleDiceRoll();
 	}
-
-	const dieFaces: any = {
-		0: '',
-		1: '\u2680',
-		2: '\u2681',
-		3: '\u2682',
-		4: '\u2683',
-		5: '\u2684',
-		6: '\u2685'
-	};
 
 	startGame(true);
 
