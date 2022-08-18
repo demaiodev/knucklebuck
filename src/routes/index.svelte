@@ -7,6 +7,7 @@
 	import type { GameState } from 'src/types/GameState';
 	import { calcTotalScore } from '$lib/utils/scores';
 	import { dieFaces } from '$lib/utils/constants';
+	import { knucklebotMove } from '$lib/Knucklebot';
 
 	import Board from '$lib/Board.svelte';
 
@@ -39,9 +40,17 @@
 		playerTwo.currentRoll = 0;
 		gameState.rollingDice = true;
 		handleDiceRoll();
+
+		if (playerTwo.isActive) initKnucklebotMove();
+	}
+
+	function initKnucklebotMove() {
+		const selection = { index: knucklebotMove(playerOne, playerTwo) };
+		makeSelection(selection);
 	}
 
 	function makeSelection({ index }: { index: number }) {
+		console.log({index})
 		const player = getActivePlayer();
 		const otherPlayerBoard = player.isFirstPlayer ? playerTwo.board : playerOne.board;
 		for (let y = 0; y < player.board[index].length; y++) {
