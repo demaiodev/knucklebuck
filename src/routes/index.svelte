@@ -5,10 +5,14 @@
 <script lang="ts">
 	import type { Player } from 'src/types/Player';
 	import type { GameState } from 'src/types/GameState';
-	import { calcTotalScore } from '$lib/utils/scores'
+	import { calcTotalScore } from '$lib/utils/scores';
 	import { dieFaces } from '$lib/utils/constants';
 
 	import Board from '$lib/Board.svelte';
+
+	let playerOne: Player;
+	let playerTwo: Player;
+	let gameState: GameState;
 
 	function getDiceRoll() {
 		return Math.floor(Math.random() * 6 + 1);
@@ -26,8 +30,8 @@
 	}
 
 	function endTurn() {
-		playerOne.score = calcTotalScore(playerOne)
-		playerTwo.score = calcTotalScore(playerTwo)
+		playerOne.score = calcTotalScore(playerOne);
+		playerTwo.score = calcTotalScore(playerTwo);
 		if (isGameOver()) gameState.gameOver = true;
 		playerOne.isActive = !playerOne.isActive;
 		playerTwo.isActive = !playerTwo.isActive;
@@ -44,6 +48,7 @@
 			if (player.board[index][y] === 0) {
 				player.board[index][y] = player.currentRoll;
 				clearMatches(otherPlayerBoard[index], player.currentRoll);
+				isGameOver();
 				endTurn();
 				return;
 			}
@@ -73,12 +78,23 @@
 	}
 
 	function isGameOver() {
-		// temporary, need to calculate scores after either board has been filled to determine the TRUE WINNER!!!
-		const p1Wins = checkPlayerBoard(playerOne);
-		const p2Wins = checkPlayerBoard(playerTwo);
-		if (p1Wins) gameState.winner = playerOne.name;
-		if (p2Wins) gameState.winner = playerTwo.name;
-		return p1Wins || p2Wins;
+		// we need to add a list of defeat messages that the AI will spout out if they lose
+		const p1BoardFull = checkPlayerBoard(playerOne);
+		const p2BoardFull = checkPlayerBoard(playerTwo);
+		// not clear if this is the actual win condition, but maybe.
+		if (p1BoardFull || p2BoardFull) {
+			if (playerOne.score > playerTwo.score) {
+				gameState.winner = playerOne;
+				gameState.gameOver = true;
+				return true;
+			}
+			if (playerTwo.score > playerOne.score) {
+				gameState.winner = playerTwo;
+				gameState.gameOver = true;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	function createPlayer(name: string, isFirstPlayer: boolean): Player {
@@ -99,46 +115,72 @@
 		};
 	}
 
-	// crate game instance
-	const gameState: GameState = {
-		gameOver: false,
-		difficulty: 0,
-		rollingDice: true
-	};
+	function startGame(init: boolean) {
+		gameState = {
+			gameOver: init,
+			difficulty: 0,
+			rollingDice: true
+		};
+		playerOne = createPlayer('Player One', true);
+		playerTwo = createPlayer('Computer Guy', false);
+		playerOne.isActive = true;
+		handleDiceRoll();
+	}
 
-	// create players
-	const playerOne = createPlayer('Player One', true);
-	const playerTwo = createPlayer('Computer Guy', false);
-
-	// player one starts
-	playerOne.isActive = true;
-	handleDiceRoll();
+	startGame(true);
 
 	$: whosTurn = playerOne.isActive ? 'Player ones turn' : 'Player twos turn';
 </script>
 
 <svelte:head>
-	<title>KnuckleBuck</title>
+	<title>Knucklebuck</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
 {#if gameState.gameOver}
-	Congrats, {gameState.winner}!
+	{#if !gameState.winner}
+		<div class="d-flex flex-column">
+			<h1 class="d-flex justify-content-center my-4">Welcome to Knucklebuck</h1>
+			<h2 class="d-flex justify-content-center my-4">
+				👇 Click this here button to get started 👇
+			</h2>
+			<button
+				type="button"
+				class="btn btn-primary p-2 my-4"
+				on:click={() => (gameState.gameOver = false)}>Start Game!</button
+			>
+		</div>
+	{:else}
+		<div class="d-flex flex-column">
+			<h1 class="d-flex justify-content-center my-4">
+				Congrats, {gameState.winner?.name}! Winner with {gameState.winner?.score} points!
+			</h1>
+			<button type="button" class="btn btn-primary my-4" on:click={() => startGame(false)}
+				>Try Again?</button
+			>
+		</div>
+	{/if}
+{:else}
+	<div class="table">
+		<div class="tableside">
+			<div class={playerTwo.isActive ? 'active-player' : ''}>
+				{playerTwo.name}
+				{playerTwo.score}
+			</div>
+			<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
+		</div>
+		<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
+		<div>{whosTurn}</div>
+		<div class="tableside">
+			<div class={playerOne.isActive ? 'active-player' : ''}>
+				{playerOne.name}
+				{playerOne.score}
+			</div>
+			<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
+		</div>
+		<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
+	</div>
 {/if}
-<div class="table">
-	<div class="tableside">
-		<div class={playerTwo.isActive ? 'active-player' : ''}>{playerTwo.name} {playerTwo.score}</div>
-		<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
-	</div>
-	<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
-
-	<div>{whosTurn}</div>
-	<div class="tableside">
-		<div class={playerOne.isActive ? 'active-player' : ''}>{playerOne.name} {playerOne.score}</div>
-		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
-	</div>
-	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
-</div>
 
 <style lang="scss">
 	.active-player {
