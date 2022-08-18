@@ -23,12 +23,12 @@
 	}
 
 	let playerScore = () => {
-		let score = 0
-		for (let i = 0; i < player.board.length; i++){
-			score += calculateLaneScore(i)
+		let score = 0;
+		for (let i = 0; i < player.board.length; i++) {
+			score += calculateLaneScore(i);
 		}
-		return score
-	}
+		return score;
+	};
 
 	$: laneActive = !gameState.rollingDice && !waitingForTurn ? ' active' : '';
 	$: waitingForTurn = !player.isActive;
@@ -45,7 +45,7 @@
 			}
 		}
 		for (const property in dict) {
-			score += Math.pow(+property, dict[property]);
+			score += +property * dict[property] * dict[property];
 		}
 		return score;
 	};
