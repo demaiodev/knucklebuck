@@ -38,8 +38,8 @@
 			if (player.board[index][y] === 0) {
 				player.board[index][y] = player.currentRoll;
 				clearMatches(otherPlayerBoard[index], player.currentRoll);
-				if (isGameOver()) gameState.gameOver = true;
 				player.score = playerScore();
+				if (isGameOver()) gameState.gameOver = true;
 				endTurn();
 				return;
 			}
@@ -69,11 +69,11 @@
 	}
 
 	function isGameOver() {
-		// temporary, need to calculate scores after either board has been filled to determine the TRUE WINNER!!!
-		const p1Wins = checkPlayerBoard(playerOne);
-		const p2Wins = checkPlayerBoard(playerTwo);
-		if (p1Wins) gameState.winner = playerOne.name;
-		if (p2Wins) gameState.winner = playerTwo.name;
+		// we need to add a list of defeat messages that the AI will spout out if they lose
+		const p1Wins = checkPlayerBoard(playerOne) && playerOne.score > playerTwo.score;
+		const p2Wins = checkPlayerBoard(playerTwo) && playerTwo.score > playerOne.score;
+		if (p1Wins) gameState.winner = playerOne;
+		if (p2Wins) gameState.winner = playerTwo;
 		return p1Wins || p2Wins;
 	}
 
@@ -129,22 +129,30 @@
 </svelte:head>
 
 {#if gameState.gameOver}
-	Congrats, {gameState.winner}!
+	<div class="d-flex justify-content-center mt-4">
+		Congrats, {gameState.winner?.name}! Winner with {gameState.winner?.score} points!
+	</div>
+{:else}
+	<div class="table">
+		<div class="tableside">
+			<div class={playerTwo.isActive ? 'active-player' : ''}>
+				{playerTwo.name}
+				{playerTwo.score}
+			</div>
+			<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
+		</div>
+		<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
+		<div>{whosTurn}</div>
+		<div class="tableside">
+			<div class={playerOne.isActive ? 'active-player' : ''}>
+				{playerOne.name}
+				{playerOne.score}
+			</div>
+			<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
+		</div>
+		<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
+	</div>
 {/if}
-<div class="table">
-	<div class="tableside">
-		<div class={playerTwo.isActive ? 'active-player' : ''}>{playerTwo.name} {playerTwo.score}</div>
-		<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
-	</div>
-	<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
-
-	<div>{whosTurn}</div>
-	<div class="tableside">
-		<div class={playerOne.isActive ? 'active-player' : ''}>{playerOne.name} {playerOne.score}</div>
-		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
-	</div>
-	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
-</div>
 
 <style lang="scss">
 	.active-player {
