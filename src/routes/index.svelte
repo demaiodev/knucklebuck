@@ -8,7 +8,7 @@
 	import Board from '$lib/Board.svelte';
 
 	function getDiceRoll() {
-		return Math.floor(Math.random() * 3 + 1);
+		return Math.floor(Math.random() * 6 + 1);
 	}
 
 	function handleDiceRoll() {
