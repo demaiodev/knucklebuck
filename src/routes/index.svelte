@@ -11,6 +11,7 @@
 
 	import Board from '$lib/Board.svelte';
 
+	let playerOneName = 'Player 1';
 	let playerOne: Player;
 	let playerTwo: Player;
 	let gameState: GameState;
@@ -130,7 +131,7 @@
 			difficulty: 0,
 			rollingDice: true
 		};
-		playerOne = createPlayer('Player One', true);
+		playerOne = createPlayer(playerOneName, true);
 		playerTwo = createPlayer('Computer Guy', false);
 		playerOne.isActive = true;
 		handleDiceRoll();
@@ -150,13 +151,19 @@
 	{#if !gameState.winner}
 		<div class="d-flex flex-column">
 			<h1 class="d-flex justify-content-center my-4">Welcome to Knucklebuck</h1>
+			<h2 class="d-flex justify-content-center my-4">Enter your name here:</h2>
+			<input class="form-control" type="text" bind:value={playerOneName} />
 			<h2 class="d-flex justify-content-center my-4">
-				👇 Click this here button to get started 👇
+				👇 Then click this button to get started 👇
 			</h2>
 			<button
 				type="button"
 				class="btn btn-primary p-2 my-4"
-				on:click={() => (gameState.gameOver = false)}>Start Game!</button
+				disabled={!playerOneName}
+				on:click={() => {
+					playerOne.name = playerOneName;
+					gameState.gameOver = false;
+				}}>Start Game!</button
 			>
 		</div>
 	{:else}
