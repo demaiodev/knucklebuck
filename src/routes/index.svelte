@@ -8,7 +8,7 @@
 	import Board from '$lib/Board.svelte';
 
 	function getDiceRoll() {
-		return Math.floor(Math.random() * 6 + 1);
+		return Math.floor(Math.random() * 3 + 1);
 	}
 
 	function handleDiceRoll() {
@@ -33,15 +33,30 @@
 
 	function makeSelection({ index, playerScore }: { index: number; playerScore: any }) {
 		const player = getActivePlayer();
+		const otherPlayerBoard = player.isFirstPlayer ? playerTwo.board : playerOne.board;
 		for (let y = 0; y < player.board[index].length; y++) {
 			if (player.board[index][y] === 0) {
 				player.board[index][y] = player.currentRoll;
+				clearMatches(otherPlayerBoard[index], player.currentRoll);
 				if (isGameOver()) gameState.gameOver = true;
 				player.score = playerScore();
 				endTurn();
 				return;
 			}
 		}
+	}
+
+	function clearMatches(arr: number[], value: number) {
+		var i = 0;
+		while (i < arr.length) {
+			if (arr[i] === value) {
+				arr.splice(i, 1);
+				arr.push(0);
+			} else {
+				++i;
+			}
+		}
+		return arr;
 	}
 
 	function checkPlayerBoard(player: Player) {
