@@ -138,7 +138,7 @@
 
 	startGame(true);
 
-	$: whosTurn = playerOne.isActive ? 'Player ones turn' : 'Player twos turn';
+	// $: whosTurn = playerOne.isActive ? 'Player ones turn' : 'Player twos turn';
 </script>
 
 <svelte:head>
@@ -178,19 +178,18 @@
 {:else}
 	<div class="table">
 		<div class="tableside">
-			<div class={playerTwo.isActive ? 'active-player' : ''}>
+			<p class={playerTwo.isActive ? 'active-player' : ''}>
 				{playerTwo.name}
 				{playerTwo.score}
-			</div>
+			</p>
 			<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 		</div>
 		<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
-		<div>{whosTurn}</div>
 		<div class="tableside">
-			<div class={playerOne.isActive ? 'active-player' : ''}>
+			<p class={playerOne.isActive ? 'active-player' : ''}>
 				{playerOne.name}
 				{playerOne.score}
-			</div>
+			</p>
 			<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
 		</div>
 		<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
