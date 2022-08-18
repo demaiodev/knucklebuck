@@ -19,12 +19,20 @@
 	};
 
 	function emitSelection(index: number) {
-		dispatch('selection', { index, player });
+		dispatch('selection', { index, playerScore });
+	}
+
+	let playerScore = () => {
+		let score = 0
+		for (let i = 0; i < player.board.length; i++){
+			score += calculateLaneScore(i)
+		}
+		return score
 	}
 
 	$: laneActive = !gameState.rollingDice && !waitingForTurn ? ' active' : '';
 	$: waitingForTurn = !player.isActive;
-	$: calculateLaneScore = (x: number) => {
+	let calculateLaneScore = (x: number) => {
 		const dict: any = {};
 		let score = 0;
 		// https://stackoverflow.com/a/5668116
@@ -39,7 +47,6 @@
 		for (const property in dict) {
 			score += Math.pow(+property, dict[property]);
 		}
-		dispatch('score-update', { player, score });
 		return score;
 	};
 </script>
