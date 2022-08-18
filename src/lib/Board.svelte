@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Player } from 'src/types/Player';
 	import type { GameState } from 'src/types/GameState';
+	import { calcLaneScore } from './utils/scores';
+	import { dieFaces } from './utils/constants';
 	import { createEventDispatcher } from 'svelte';
 
 	export let gameState: GameState;
@@ -8,53 +10,19 @@
 
 	const laneType = !player.isFirstPlayer ? 'lane--inverted' : 'lane';
 	const dispatch = createEventDispatcher();
-	const dieFaces: any = {
-		0: '',
-		1: '\u2680',
-		2: '\u2681',
-		3: '\u2682',
-		4: '\u2683',
-		5: '\u2684',
-		6: '\u2685'
-	};
 
 	function emitSelection(index: number) {
-		dispatch('selection', { index, playerScore });
+		dispatch('selection', { index });
 	}
-
-	let playerScore = () => {
-		let score = 0;
-		for (let i = 0; i < player.board.length; i++) {
-			score += calculateLaneScore(i);
-		}
-		return score;
-	};
 
 	$: laneActive = !gameState.rollingDice && !waitingForTurn ? ' active' : '';
 	$: waitingForTurn = !player.isActive;
-	let calculateLaneScore = (x: number) => {
-		const dict: any = {};
-		let score = 0;
-		// https://stackoverflow.com/a/5668116
-		for (var i = 0; i < player.board[x].length; ++i) {
-			if (player.board[x][i] === 1) {
-				++score;
-			} else if (player.board[x][i] !== 0) {
-				if (!dict[player.board[x][i]]) dict[player.board[x][i]] = 0;
-				++dict[player.board[x][i]];
-			}
-		}
-		for (const property in dict) {
-			score += +property * dict[property] * dict[property];
-		}
-		return score;
-	};
 </script>
 
 <section class="board">
 	{#each player.board as lane, index (index)}
 		<div class="score-wrapper">
-			<div class="lane_score">{calculateLaneScore(index)}</div>
+			<div class="lane_score">{calcLaneScore(index, player)}</div>
 		</div>
 		<button
 			disabled={waitingForTurn || gameState.rollingDice || gameState.gameOver}
