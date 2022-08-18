@@ -31,12 +31,13 @@
 		handleDiceRoll();
 	}
 
-	function makeSelection({ index }: { index: number }) {
+	function makeSelection({ index, playerScore }: { index: number; playerScore: any }) {
 		const player = getActivePlayer();
 		for (let y = 0; y < player.board[index].length; y++) {
 			if (player.board[index][y] === 0) {
 				player.board[index][y] = player.currentRoll;
 				if (isGameOver()) gameState.gameOver = true;
+				player.score = playerScore();
 				endTurn();
 				return;
 			}
@@ -77,10 +78,6 @@
 				[0, 0, 0]
 			]
 		};
-	}
-
-	function handleScoreUpdate({ player, score }: { player: Player; score: number }) {
-		player.score = score;
 	}
 
 	// crate game instance
@@ -124,24 +121,14 @@
 		<div class={playerTwo.isActive ? 'active-player' : ''}>{playerTwo.name} {playerTwo.score}</div>
 		<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 	</div>
-	<Board
-		player={playerTwo}
-		{gameState}
-		on:selection={({ detail }) => makeSelection(detail)}
-		on:score-update={({ detail }) => handleScoreUpdate(detail)}
-	/>
+	<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
 
 	<div>{whosTurn}</div>
 	<div class="tableside">
 		<div class={playerOne.isActive ? 'active-player' : ''}>{playerOne.name} {playerOne.score}</div>
 		<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
 	</div>
-	<Board
-		player={playerOne}
-		{gameState}
-		on:selection={({ detail }) => makeSelection(detail)}
-		on:score-update={({ detail }) => handleScoreUpdate(detail)}
-	/>
+	<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
 </div>
 
 <style lang="scss">
