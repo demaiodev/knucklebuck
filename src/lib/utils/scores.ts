@@ -15,9 +15,7 @@ export function calcLaneScore(x: number, player: Player) {
 	let score = 0;
 	// https://stackoverflow.com/a/5668116
 	for (var i = 0; i < player.board[x].length; ++i) {
-		if (player.board[x][i] === 1) {
-			++score;
-		} else if (player.board[x][i] !== 0) {
+		if (player.board[x][i] !== 0) {
 			if (!dict[player.board[x][i]]) dict[player.board[x][i]] = 0;
 			++dict[player.board[x][i]];
 		}
