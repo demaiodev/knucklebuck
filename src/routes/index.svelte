@@ -46,12 +46,11 @@
 	}
 
 	function initKnucklebotMove() {
-		const selection = { index: knucklebotMove(playerOne, playerTwo) };
+		const selection = { index: knucklebotMove(playerOne, playerTwo, gameState) };
 		makeSelection(selection);
 	}
 
 	function makeSelection({ index }: { index: number }) {
-		console.log({index})
 		const player = getActivePlayer();
 		const otherPlayerBoard = player.isFirstPlayer ? playerTwo.board : playerOne.board;
 		for (let y = 0; y < player.board[index].length; y++) {
