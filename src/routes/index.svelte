@@ -7,6 +7,10 @@
 	import type { GameState } from 'src/types/GameState';
 	import Board from '$lib/Board.svelte';
 
+	let playerOne: Player;
+	let playerTwo: Player;
+	let gameState: GameState;
+
 	function getDiceRoll() {
 		return Math.floor(Math.random() * 6 + 1);
 	}
@@ -39,7 +43,7 @@
 				player.board[index][y] = player.currentRoll;
 				clearMatches(otherPlayerBoard[index], player.currentRoll);
 				player.score = playerScore();
-				if (isGameOver()) gameState.gameOver = true;
+				isGameOver();
 				endTurn();
 				return;
 			}
@@ -70,11 +74,22 @@
 
 	function isGameOver() {
 		// we need to add a list of defeat messages that the AI will spout out if they lose
-		const p1Wins = checkPlayerBoard(playerOne) && playerOne.score > playerTwo.score;
-		const p2Wins = checkPlayerBoard(playerTwo) && playerTwo.score > playerOne.score;
-		if (p1Wins) gameState.winner = playerOne;
-		if (p2Wins) gameState.winner = playerTwo;
-		return p1Wins || p2Wins;
+		const p1BoardFull = checkPlayerBoard(playerOne);
+		const p2BoardFull = checkPlayerBoard(playerTwo);
+		// not clear if this is the actual win condition, but maybe.
+		if (p1BoardFull || p2BoardFull) {
+			if (playerOne.score > playerTwo.score) {
+				gameState.winner = playerOne;
+				gameState.gameOver = true;
+				return true;
+			}
+			if (playerTwo.score > playerOne.score) {
+				gameState.winner = playerTwo;
+				gameState.gameOver = true;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	function createPlayer(name: string, isFirstPlayer: boolean): Player {
@@ -95,12 +110,17 @@
 		};
 	}
 
-	// crate game instance
-	const gameState: GameState = {
-		gameOver: false,
-		difficulty: 0,
-		rollingDice: true
-	};
+	function startGame(init: boolean) {
+		gameState = {
+			gameOver: init,
+			difficulty: 0,
+			rollingDice: true
+		};
+		playerOne = createPlayer('Player One', true);
+		playerTwo = createPlayer('Computer Guy', false);
+		playerOne.isActive = true;
+		handleDiceRoll();
+	}
 
 	const dieFaces: any = {
 		0: '',
@@ -112,26 +132,39 @@
 		6: '\u2685'
 	};
 
-	// create players
-	const playerOne = createPlayer('Player One', true);
-	const playerTwo = createPlayer('Computer Guy', false);
-
-	// player one starts
-	playerOne.isActive = true;
-	handleDiceRoll();
+	startGame(true);
 
 	$: whosTurn = playerOne.isActive ? 'Player ones turn' : 'Player twos turn';
 </script>
 
 <svelte:head>
-	<title>KnuckleBuck</title>
+	<title>Knucklebuck</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
 {#if gameState.gameOver}
-	<div class="d-flex justify-content-center mt-4">
-		Congrats, {gameState.winner?.name}! Winner with {gameState.winner?.score} points!
-	</div>
+	{#if !gameState.winner}
+		<div class="d-flex flex-column">
+			<h1 class="d-flex justify-content-center my-4">Welcome to Knucklebuck</h1>
+			<h2 class="d-flex justify-content-center my-4">
+				👇 Click this here button to get started 👇
+			</h2>
+			<button
+				type="button"
+				class="btn btn-primary p-2 my-4"
+				on:click={() => (gameState.gameOver = false)}>Start Game!</button
+			>
+		</div>
+	{:else}
+		<div class="d-flex flex-column">
+			<h1 class="d-flex justify-content-center my-4">
+				Congrats, {gameState.winner?.name}! Winner with {gameState.winner?.score} points!
+			</h1>
+			<button type="button" class="btn btn-primary my-4" on:click={() => startGame(false)}
+				>Try Again?</button
+			>
+		</div>
+	{/if}
 {:else}
 	<div class="table">
 		<div class="tableside">
