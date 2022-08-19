@@ -65,9 +65,7 @@
 		transition-property: transform;
 	}
 
-	.active:hover,
-	.active:focus,
-	.active:active {
+	.active:hover {
 		transform: scale(1.03);
 		background-color: rgba(68, 215, 23, 0.15);
 	}

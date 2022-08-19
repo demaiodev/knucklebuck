@@ -136,7 +136,7 @@
 		handleDiceRoll();
 	}
 
-	startGame(false);
+	startGame(true);
 
 	// $: whosTurn = playerOne.isActive ? 'Player ones turn' : 'Player twos turn';
 </script>
