@@ -136,7 +136,7 @@
 		handleDiceRoll();
 	}
 
-	startGame(true);
+	startGame(false);
 
 	// $: whosTurn = playerOne.isActive ? 'Player ones turn' : 'Player twos turn';
 </script>
@@ -179,7 +179,7 @@
 	<div>
 		<div class="container">
 			<div class="row mb-4">
-				<div class="col-xs-6 d-flex align-items-center pull-right">
+				<div class="col-xs-6 d-flex align-items-center justify-content-center">
 					<div class="h3">
 						<span>
 							{playerTwo.name}:
@@ -187,7 +187,7 @@
 							{playerTwo.score}
 						</span>
 					</div>
-					<div class="d-flex justifty-content-end dice">{dieFaces[playerTwo.currentRoll]}</div>
+					<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 				</div>
 
 				<div class="col-xs-6 mb-4">
@@ -209,7 +209,7 @@
 						on:selection={({ detail }) => makeSelection(detail)}
 					/>
 				</div>
-				<div class="col-xs-6 d-flex align-items-center">
+				<div class="col-xs-6 d-flex align-items-center justify-content-center">
 					<div class="h3">
 						<span>
 							{playerOne.name}:
@@ -217,7 +217,7 @@
 							{playerOne.score}
 						</span>
 					</div>
-					<div class="d-flex justifty-content-end dice">{dieFaces[playerOne.currentRoll]}</div>
+					<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
 				</div>
 			</div>
 		</div>
@@ -226,11 +226,11 @@
 
 <style lang="scss">
 	.dice {
-		font-size: 5rem;
+		font-size: 4rem;
 		padding: 0px;
 		margin: 0px;
 		color: #222;
-		padding-bottom: 1.5rem;
+		padding-bottom: 1.15rem;
 		padding-top: 0;
 	}
 </style>
