@@ -57,13 +57,19 @@
 		left: -60px;
 		position: absolute;
 	}
-	.active:hover {
-		background-color: bisque;
-	}
 	.lane {
-		border: none;
-		padding: 0;
+		border: 1px solid transparent;
 		margin: 0;
+		padding: 0;
+		transition-duration: 0.3s;
+		transition-property: transform;
+	}
+
+	.active:hover,
+	.active:focus,
+	.active:active {
+		transform: scale(1.03);
+		background-color: rgba(68, 215, 23, 0.15);
 	}
 	.lane--inverted {
 		display: flex;
