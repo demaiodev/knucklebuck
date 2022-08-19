@@ -21,9 +21,11 @@
 
 <section class="board">
 	{#each player.board as lane, index (index)}
-		<div class="score-wrapper">
-			<div class="lane_score">{calcLaneScore(index, player)}</div>
-		</div>
+		{#if player.isFirstPlayer}
+			<div class="score-wrapper">
+				<h3 class="fp_lane_score">{calcLaneScore(index, player)}</h3>
+			</div>
+		{/if}
 		<button
 			disabled={waitingForTurn || gameState.rollingDice || gameState.gameOver}
 			class={laneType + laneActive}
@@ -33,6 +35,11 @@
 				<div class="space"><div class="dice">{dieFaces[space]}</div></div>
 			{/each}
 		</button>
+		{#if !player.isFirstPlayer}
+			<div class="score-wrapper">
+				<h3 class="sp_lane_score">{calcLaneScore(index, player)}</h3>
+			</div>
+		{/if}
 	{/each}
 </section>
 
@@ -40,9 +47,14 @@
 	.score-wrapper {
 		position: relative;
 	}
-	.lane_score {
+	.fp_lane_score {
 		top: -185px;
-		left: 30px;
+		left: 33px;
+		position: absolute;
+	}
+	.sp_lane_score {
+		top: 150px;
+		left: -60px;
 		position: absolute;
 	}
 	.active:hover {
@@ -79,5 +91,6 @@
 		justify-content: center;
 		height: 6rem;
 		width: 5.5rem;
+		margin: 0.15rem;
 	}
 </style>

@@ -176,45 +176,61 @@
 		</div>
 	{/if}
 {:else}
-	<div class="table">
-		<div class="tableside">
-			<div class={playerTwo.isActive ? 'active-player' : ''}>
-				{playerTwo.name}
-				{playerTwo.score}
+	<div>
+		<div class="container">
+			<div class="row mb-4">
+				<div class="col-xs-6 d-flex align-items-center pull-right">
+					<div class="h3">
+						<span>
+							{playerTwo.name}:
+						</span><span class="px-3">
+							{playerTwo.score}
+						</span>
+					</div>
+					<div class="d-flex justifty-content-end dice">{dieFaces[playerTwo.currentRoll]}</div>
+				</div>
+
+				<div class="col-xs-6 mb-4">
+					<Board
+						player={playerTwo}
+						{gameState}
+						on:selection={({ detail }) => makeSelection(detail)}
+					/>
+				</div>
 			</div>
-			<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 		</div>
-		<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
-		<div>{whosTurn}</div>
-		<div class="tableside">
-			<div class={playerOne.isActive ? 'active-player' : ''}>
-				{playerOne.name}
-				{playerOne.score}
+		<hr class="m-0" />
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-6 mt-5">
+					<Board
+						player={playerOne}
+						{gameState}
+						on:selection={({ detail }) => makeSelection(detail)}
+					/>
+				</div>
+				<div class="col-xs-6 d-flex align-items-center">
+					<div class="h3">
+						<span>
+							{playerOne.name}:
+						</span><span class="px-3">
+							{playerOne.score}
+						</span>
+					</div>
+					<div class="d-flex justifty-content-end dice">{dieFaces[playerOne.currentRoll]}</div>
+				</div>
 			</div>
-			<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
 		</div>
-		<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
 	</div>
 {/if}
 
 <style lang="scss">
-	.active-player {
-		font-size: 1.5rem;
-		color: red; // what color should this be?
-	}
 	.dice {
-		font-size: 4rem;
+		font-size: 5rem;
+		padding: 0px;
+		margin: 0px;
 		color: #222;
-		padding-bottom: 0.8rem;
-	}
-	.tableside {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		// margin-top: 2rem;
-		height: 100px;
-		.dice {
-			margin-left: 2rem;
-		}
+		padding-bottom: 1.5rem;
+		padding-top: 0;
 	}
 </style>
