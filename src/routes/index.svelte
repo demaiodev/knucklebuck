@@ -183,7 +183,7 @@
 					<div class="h3">
 						<span>
 							{playerTwo.name}:
-						</span><span class="px-3">
+						</span><span class="px-2">
 							{playerTwo.score}
 						</span>
 					</div>
@@ -213,7 +213,7 @@
 					<div class="h3">
 						<span>
 							{playerOne.name}:
-						</span><span class="px-3">
+						</span><span class="px-2">
 							{playerOne.score}
 						</span>
 					</div>
