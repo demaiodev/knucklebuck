@@ -75,6 +75,8 @@
 		color: var(--accent-color-secondary);
 	}
 	.lane {
+		display: flex;
+		flex-direction: column;
 		border: 1px solid transparent;
 		margin: 0;
 		padding: 0;
@@ -87,7 +89,7 @@
 	.lane--inverted {
 		display: flex;
 		flex-direction: column-reverse;
-		border: none;
+		border: 1px solid transparent;
 		padding: 0;
 		margin: 0;
 	}
@@ -109,6 +111,6 @@
 		justify-content: center;
 		height: 6rem;
 		width: 5.5rem;
-		margin: 0.15rem;
+		margin: 0.10rem 0.07rem;
 	}
 </style>
