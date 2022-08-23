@@ -47,27 +47,42 @@
 	.score-wrapper {
 		position: relative;
 	}
+	button {
+		background: transparent;
+		&:disabled {
+			background: transparent;
+		}
+	}
 	.fp_lane_score {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 2rem;
 		top: -185px;
 		left: 33px;
 		position: absolute;
+		color: var(--accent-color)
 	}
 	.sp_lane_score {
 		top: 150px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 2rem;
 		left: -60px;
 		position: absolute;
+		color: var(--accent-color-secondary)
 	}
 	.lane {
 		border: 1px solid transparent;
 		margin: 0;
 		padding: 0;
-		transition-duration: 0.3s;
+		transition-duration: 0.2s;
 		transition-property: transform;
 	}
 
 	.active:hover {
 		transform: scale(1.03);
-		background-color: rgba(68, 215, 23, 0.15);
 	}
 	.lane--inverted {
 		display: flex;
@@ -78,7 +93,7 @@
 	}
 	.dice {
 		font-size: 4rem;
-		color: #222;
+		color: var(--secondary-color);
 		padding-bottom: 0.8rem;
 	}
 	.board {
@@ -86,12 +101,11 @@
 		justify-content: center;
 		align-items: center;
 		flex-direction: row;
-		// margin-top: 4rem;
 	}
 	.space {
 		display: flex;
 		align-items: center;
-		border: 2px solid #222;
+		border: 2px solid var(--secondary-color);
 		justify-content: center;
 		height: 6rem;
 		width: 5.5rem;

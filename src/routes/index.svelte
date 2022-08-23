@@ -47,7 +47,9 @@
 
 	function initKnucklebotMove() {
 		const selection = { index: knucklebotMove(playerOne, playerTwo, gameState) };
-		makeSelection(selection);
+		setTimeout(() => {
+			makeSelection(selection);
+		}, 500);
 	}
 
 	function makeSelection({ index }: { index: number }) {
@@ -137,8 +139,6 @@
 	}
 
 	startGame(true);
-
-	// $: whosTurn = playerOne.isActive ? 'Player ones turn' : 'Player twos turn';
 </script>
 
 <svelte:head>
@@ -182,7 +182,7 @@
 	<div>
 		<div class="container">
 			<div class="row mb-4">
-				<div class="col-xs-6 d-flex align-items-center justify-content-center">
+				<div class="top col-xs-6 d-flex align-items-center justify-content-center">
 					<div class="h3">
 						<span>
 							{playerTwo.name}:
@@ -192,7 +192,6 @@
 					</div>
 					<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 				</div>
-
 				<div class="col-xs-6 mb-4">
 					<Board
 						player={playerTwo}
@@ -202,7 +201,7 @@
 				</div>
 			</div>
 		</div>
-		<hr class="m-0" />
+		<hr class="divider m-0" />
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-6 mt-5">
@@ -228,11 +227,17 @@
 {/if}
 
 <style lang="scss">
+	.divider{
+		color: var(--secondary-color)
+	}
+	.top {
+		height: 3rem;
+	}
 	.dice {
 		font-size: 4rem;
 		padding: 0px;
 		margin: 0px;
-		color: #222;
+		color: var(--secondary-color);
 		padding-bottom: 1.15rem;
 		padding-top: 0;
 	}
