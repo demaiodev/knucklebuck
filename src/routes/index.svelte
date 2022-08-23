@@ -49,7 +49,7 @@
 		const selection = { index: knucklebotMove(playerOne, playerTwo, gameState) };
 		setTimeout(() => {
 			makeSelection(selection);
-		}, 500);
+		}, 2000);
 	}
 
 	function makeSelection({ index }: { index: number }) {
@@ -178,7 +178,7 @@
 {:else}
 	<div>
 		<div class="container">
-			<div class="row mb-4">
+			<div class="row my-4">
 				<div class="top col-xs-6 d-flex align-items-center justify-content-center">
 					<div class="h3">
 						<span>
