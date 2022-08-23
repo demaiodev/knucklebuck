@@ -15,7 +15,8 @@
 		dispatch('selection', { index });
 	}
 
-	$: laneActive = !gameState.rollingDice && !waitingForTurn ? ' active' : '';
+	$: laneActive =
+		!gameState.rollingDice && !waitingForTurn && player.isFirstPlayer ? ' active' : '';
 	$: waitingForTurn = !player.isActive;
 </script>
 
@@ -81,6 +82,7 @@
 
 	.active:hover {
 		border: 1px solid var(--accent-color);
+		background-color: rgba(244, 192, 37, 0.15);
 	}
 	.lane--inverted {
 		display: flex;
