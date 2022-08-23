@@ -61,7 +61,7 @@
 		top: -185px;
 		left: 33px;
 		position: absolute;
-		color: var(--accent-color)
+		color: var(--accent-color);
 	}
 	.sp_lane_score {
 		top: 150px;
@@ -71,18 +71,16 @@
 		width: 2rem;
 		left: -60px;
 		position: absolute;
-		color: var(--accent-color-secondary)
+		color: var(--accent-color-secondary);
 	}
 	.lane {
 		border: 1px solid transparent;
 		margin: 0;
 		padding: 0;
-		transition-duration: 0.2s;
-		transition-property: transform;
 	}
 
 	.active:hover {
-		transform: scale(1.03);
+		border: 1px solid var(--accent-color);
 	}
 	.lane--inverted {
 		display: flex;

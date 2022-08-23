@@ -148,19 +148,16 @@
 
 {#if gameState.gameOver}
 	{#if !gameState.winner}
-		<div class="d-flex flex-column">
+		<div class="d-flex flex-column container w-50">
 			<h1 class="d-flex justify-content-center my-4">Welcome to Knucklebuck</h1>
 			<h6 class="position-absolute" style="right:100px;">
 				<a href="/rules">How do I play?</a>
 			</h6>
 			<h5 class="d-flex justify-content-center my-4">Enter your name here:</h5>
 			<input class="form-control mb-4" type="text" bind:value={playerOneName} />
-			<h6 class="d-flex justify-content-center my-4">
-				👇 Then click this button to get started 👇
-			</h6>
 			<button
 				type="button"
-				class="btn btn-primary p-2 my-2"
+				class="btn btn-danger p-2 my-2"
 				disabled={!playerOneName}
 				on:click={() => {
 					playerOne.name = playerOneName;
@@ -227,8 +224,8 @@
 {/if}
 
 <style lang="scss">
-	.divider{
-		color: var(--secondary-color)
+	.divider {
+		color: var(--secondary-color);
 	}
 	.top {
 		height: 3rem;
