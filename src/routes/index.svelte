@@ -176,59 +176,64 @@
 		</div>
 	{/if}
 {:else}
-	<div>
-		<div class="container">
-			<div class="row my-4">
-				<div class="top col-xs-6 d-flex align-items-center justify-content-center">
-					<div class="h3">
-						<span>
-							{playerTwo.name}:
-						</span><span class="px-2">
-							{playerTwo.score}
-						</span>
-					</div>
-					<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
-				</div>
-				<div class="col-xs-6 mb-4">
-					<Board
-						player={playerTwo}
-						{gameState}
-						on:selection={({ detail }) => makeSelection(detail)}
-					/>
-				</div>
-			</div>
+	<!-- start match game -->
+
+	<div class="enemy">
+		<div />
+		<div class="enemy__board">
+			<Board player={playerTwo} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
 		</div>
-		<hr class="divider m-0" />
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-6 mt-5">
-					<Board
-						player={playerOne}
-						{gameState}
-						on:selection={({ detail }) => makeSelection(detail)}
-					/>
-				</div>
-				<div class="col-xs-6 d-flex align-items-center justify-content-center">
-					<div class="h3">
-						<span>
-							{playerOne.name}:
-						</span><span class="px-2">
-							{playerOne.score}
-						</span>
-					</div>
-					<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
-				</div>
+		<div class="enemy__stats">
+			<div class="h3">
+				<span>
+					{playerTwo.name}:
+				</span><span class="px-2">
+					{playerTwo.score}
+				</span>
 			</div>
+			<div class="dice">{dieFaces[playerTwo.currentRoll]}</div>
 		</div>
+	</div>
+
+	<hr class="divider m-0" />
+
+	<div class="player">
+		<div class="player__stats">
+			<div class="h3">
+				<span>
+					{playerOne.name}:
+				</span><span class="px-2">
+					{playerOne.score}
+				</span>
+			</div>
+			<div class="dice">{dieFaces[playerOne.currentRoll]}</div>
+		</div>
+		<div class="player__board">
+			<Board player={playerOne} {gameState} on:selection={({ detail }) => makeSelection(detail)} />
+		</div>
+		<div />
 	</div>
 {/if}
 
 <style lang="scss">
+	.player, .enemy {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		margin: 3rem 0;
+		@media only screen and (max-width: 768px) {
+			display: grid;
+			grid-template-columns: 1fr;
+			margin: 0;
+		}
+		&__stats{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 115px;
+		}
+	}
 	.divider {
 		color: var(--secondary-color);
-	}
-	.top {
-		height: 3rem;
 	}
 	.dice {
 		font-size: 4rem;
