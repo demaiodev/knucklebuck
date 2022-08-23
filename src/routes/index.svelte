@@ -49,7 +49,7 @@
 		const selection = { index: knucklebotMove(playerOne, playerTwo, gameState) };
 		setTimeout(() => {
 			makeSelection(selection);
-		}, 2000);
+		}, 1500);
 	}
 
 	function makeSelection({ index }: { index: number }) {
@@ -166,11 +166,11 @@
 			>
 		</div>
 	{:else}
-		<div class="d-flex flex-column">
+		<div class="d-flex flex-column container w-50">
 			<h1 class="d-flex justify-content-center my-4">
-				Congrats, {gameState.winner?.name}! Winner with {gameState.winner?.score} points!
+				Congrats, {gameState.winner?.name}! <br /> You scored {gameState.winner?.score} points.
 			</h1>
-			<button type="button" class="btn btn-primary my-4" on:click={() => startGame(false)}
+			<button type="button" class="btn btn-danger my-4" on:click={() => startGame(false)}
 				>Try Again?</button
 			>
 		</div>
