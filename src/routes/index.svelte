@@ -194,7 +194,7 @@
 		</div>
 		<div class="enemy__stats">
 			<div class="h3">
-				<span>
+				<span class={playerTwo.isActive ? 'p2-active' : ''}>
 					{playerTwo.name}:
 				</span><span class="px-2 p2-score">
 					{playerTwo.score}
@@ -209,7 +209,7 @@
 	<div class="player">
 		<div class="player__stats">
 			<div class="h3">
-				<span>
+				<span class={playerOne.isActive ? 'p1-active' : ''}>
 					{playerOne.name}:
 				</span><span class="px-2 p1-score">
 					{playerOne.score}
@@ -237,8 +237,9 @@
 		}
 		&__stats {
 			display: flex;
-			justify-content: center;
+			justify-content: space-between;
 			align-items: center;
+			flex-direction: column;
 			height: 115px;
 		}
 	}
@@ -258,5 +259,11 @@
 	}
 	.p2-score {
 		color: var(--accent-color-secondary);
+	}
+	.p1-active {
+		text-decoration: underline var(--accent-color);
+	}
+	.p2-active {
+		text-decoration: underline var(--accent-color-secondary);
 	}
 </style>
