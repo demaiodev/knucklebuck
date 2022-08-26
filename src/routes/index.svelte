@@ -59,7 +59,6 @@
 			if (player.board[index][y] === 0) {
 				player.board[index][y] = player.currentRoll;
 				clearMatches(otherPlayerBoard[index], player.currentRoll);
-				isGameOver();
 				endTurn();
 				return;
 			}
@@ -97,15 +96,25 @@
 			if (playerOne.score > playerTwo.score) {
 				gameState.winner = playerOne;
 				gameState.gameOver = true;
+				playerOne.wins++;
+				saveData();
 				return true;
 			}
 			if (playerTwo.score > playerOne.score) {
 				gameState.winner = playerTwo;
 				gameState.gameOver = true;
+				playerTwo.wins++;
+				saveData();
 				return true;
 			}
 		}
 		return false;
+	}
+
+	function saveData() {
+		let array = JSON.parse(localStorage.getItem('matches')!) || [];
+		array.push({ playerOne, playerTwo });
+		localStorage.setItem('matches', JSON.stringify(array));
 	}
 
 	function createPlayer(name: string, isFirstPlayer: boolean): Player {
@@ -187,7 +196,7 @@
 			<div class="h3">
 				<span>
 					{playerTwo.name}:
-				</span><span class="px-2">
+				</span><span class="px-2 p2-score">
 					{playerTwo.score}
 				</span>
 			</div>
@@ -202,7 +211,7 @@
 			<div class="h3">
 				<span>
 					{playerOne.name}:
-				</span><span class="px-2">
+				</span><span class="px-2 p1-score">
 					{playerOne.score}
 				</span>
 			</div>
@@ -216,7 +225,8 @@
 {/if}
 
 <style lang="scss">
-	.player, .enemy {
+	.player,
+	.enemy {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		margin: 3rem 0;
@@ -225,7 +235,7 @@
 			grid-template-columns: 1fr;
 			margin: 0;
 		}
-		&__stats{
+		&__stats {
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -242,5 +252,11 @@
 		color: var(--secondary-color);
 		padding-bottom: 1.15rem;
 		padding-top: 0;
+	}
+	.p1-score {
+		color: var(--accent-color);
+	}
+	.p2-score {
+		color: var(--accent-color-secondary);
 	}
 </style>
