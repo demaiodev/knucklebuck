@@ -16,7 +16,7 @@
 		</svg>
 		<ul>
 			<li class:active={$page.url.pathname === '/'}>
-				<a sveltekit:prefetch href="/">Knucklebuck</a>
+				<a sveltekit:prefetch href="/">Play</a>
 			</li>
 			<li class:active={$page.url.pathname === '/rules'}>
 				<a sveltekit:prefetch href="/rules">Rules</a>
@@ -63,7 +63,7 @@
 	nav {
 		display: flex;
 		justify-content: center;
-		--background: var(--secondary-color)
+		--background: var(--secondary-color);
 	}
 
 	svg {
