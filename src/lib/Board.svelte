@@ -28,7 +28,10 @@
 			</div>
 		{/if}
 		<button
-			disabled={waitingForTurn || gameState.rollingDice || gameState.gameOver}
+			disabled={waitingForTurn ||
+				gameState.rollingDice ||
+				gameState.gameOver ||
+				!player.isFirstPlayer}
 			class={laneType + laneActive}
 			on:click={() => emitSelection(index)}
 		>
@@ -111,6 +114,6 @@
 		justify-content: center;
 		height: 6rem;
 		width: 5.5rem;
-		margin: 0.10rem 0.07rem;
+		margin: 0.1rem 0.07rem;
 	}
 </style>
