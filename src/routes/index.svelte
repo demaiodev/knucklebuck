@@ -32,6 +32,7 @@
 	}
 
 	function endTurn() {
+		// Refactor this at some point.
 		playerOne.score = calcTotalScore(playerOne);
 		playerTwo.score = calcTotalScore(playerTwo);
 		if (isGameOver()) gameState.gameOver = true;
@@ -42,7 +43,7 @@
 		gameState.rollingDice = true;
 		handleDiceRoll();
 
-		if (playerTwo.isActive) initKnucklebotMove();
+		if (playerTwo.isActive && !gameState.gameOver) initKnucklebotMove();
 	}
 
 	function initKnucklebotMove() {
@@ -78,7 +79,7 @@
 		return arr;
 	}
 
-	function checkPlayerBoard(player: Player) {
+	function isBoardFull(player: Player) {
 		for (let x = 0; x < player.board.length; x++) {
 			for (let y = 0; y < player.board[x].length; y++) {
 				if (player.board[x][y] === 0) return false;
@@ -88,11 +89,8 @@
 	}
 
 	function isGameOver() {
-		// we need to add a list of defeat messages that the AI will spout out if they lose
-		const p1BoardFull = checkPlayerBoard(playerOne);
-		const p2BoardFull = checkPlayerBoard(playerTwo);
-		// not clear if this is the actual win condition, but maybe.
-		if (p1BoardFull || p2BoardFull) {
+		// Refactor this at some point.
+		if (isBoardFull(playerOne) || isBoardFull(playerTwo)) {
 			if (playerOne.score > playerTwo.score) {
 				gameState.winner = playerOne;
 				gameState.gameOver = true;
@@ -177,7 +175,15 @@
 	{:else}
 		<div class="d-flex flex-column container w-50">
 			<h1 class="d-flex justify-content-center my-4">
-				Congrats, {gameState.winner?.name}! <br /> You scored {gameState.winner?.score} points.
+				{#if gameState.winner.isFirstPlayer}
+					Congrats, {gameState.winner.name}! <br /> You scored {gameState.winner.score} points.
+				{:else}
+					Shucks! Looks like {gameState.winner.name} beat you.
+					<br />
+					They had {gameState.winner.score} points.
+					<br />
+					Better luck next time!
+				{/if}
 			</h1>
 			<button type="button" class="btn btn-danger my-4" on:click={() => startGame(false)}
 				>Try Again?</button
