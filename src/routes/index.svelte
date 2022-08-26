@@ -200,9 +200,9 @@
 		</div>
 		<div class="enemy__stats">
 			<div class="h3">
-				<span class={playerTwo.isActive ? 'p2-active' : ''}>
+				<span class={playerTwo.isActive ? 'enemy__stats--active' : ''}>
 					{playerTwo.name}:
-				</span><span class="px-2 p2-score">
+				</span><span class="px-2 enemy__stats__score">
 					{playerTwo.score}
 				</span>
 			</div>
@@ -215,9 +215,9 @@
 	<div class="player">
 		<div class="player__stats">
 			<div class="h3">
-				<span class={playerOne.isActive ? 'p1-active' : ''}>
+				<span class={playerOne.isActive ? 'player__stats--active' : ''}>
 					{playerOne.name}:
-				</span><span class="px-2 p1-score">
+				</span><span class="px-2 player__stats__score">
 					{playerOne.score}
 				</span>
 			</div>
@@ -247,6 +247,26 @@
 			align-items: center;
 			flex-direction: column;
 			height: 115px;
+			@media only screen and (max-width: 768px) {
+				flex-direction: row;
+				justify-content: center;
+			}
+		}
+	}
+	.enemy__stats {
+		&__score {
+			color: var(--accent-color-secondary);
+		}
+		&--active {
+			text-decoration: underline var(--accent-color-secondary);
+		}
+	}
+	.player__stats {
+		&__score {
+			color: var(--accent-color);
+		}
+		&--active {
+			text-decoration: underline var(--accent-color);
 		}
 	}
 	.divider {
@@ -259,17 +279,5 @@
 		color: var(--secondary-color);
 		padding-bottom: 1.15rem;
 		padding-top: 0;
-	}
-	.p1-score {
-		color: var(--accent-color);
-	}
-	.p2-score {
-		color: var(--accent-color-secondary);
-	}
-	.p1-active {
-		text-decoration: underline var(--accent-color);
-	}
-	.p2-active {
-		text-decoration: underline var(--accent-color-secondary);
 	}
 </style>
